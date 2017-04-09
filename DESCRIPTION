@@ -1,0 +1,14 @@
+Package: LendingClubAccess
+Type: Package
+Title: Graphical User Interface for Using the Lending Club API
+Version: 0.0.1
+Authors@R: person("Ryan","Kuhn",email="kuhnrl30@gmail.com", role=c("aut","cre"))
+Author: Ryan Kuhn <kuhnrl30@gmail.com>
+Maintainer: Ryan Kuhn <kuhnrl30@gmail.com>
+URL: https://github.com/kuhnrl30/LendingClubAccess
+BugReports: https://github.com/kuhnrl30/LendingClubAccess/issues 
+Description: Provides an alternative method for many of the common actions taken on the Lending Club website. Investors are able to access their account summary, transfer money in or out of their account, and most importantly buy and sell notes.
+License: MIT + file LICENSE
+LazyData: TRUE
+import: shiny
+RoxygenNote: 6.0.1

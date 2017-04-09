@@ -1,0 +1,30 @@
+template:
+  ganalytics: 'UA-66230069-1'
+  params:
+    bootswatch: journal
+reference:
+- title: Functions
+  contents:
+  - launch_app
+
+navbar:
+  title: LendingClubAccess
+  type: default
+  left:
+    - text: Getting Started
+      href: articles/LendingClubAccess.html
+    - text: Functions
+      href: reference/index.html
+  right:
+    - text: Related Packages
+      menu:
+      - text: LendingClub
+        href: http://ryankuhn.net/LendingClub
+      - text: LendingClubModel
+        href: http://ryankuhn.net/LendingClubModel
+      - text: LendingClubData
+        href: http://ryankuhn.net/LendingClubData
+    - text: ryankuhn.net
+      href: http://ryankuhn.net
+    - icon: fa-github
+      href: https://github.com/kuhnrl30/LendingClubAccess

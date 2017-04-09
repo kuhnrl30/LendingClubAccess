@@ -1,0 +1,10 @@
+---
+output: html_document
+---
+
+#LendingClubAccess
+[![Build Status](https://travis-ci.org/kuhnrl30/LendingClubAccess.svg?branch=master)](https://travis-ci.org/kuhnrl30/LendingClubAccess)
+
+The shiny app in this package is a replacement for Lending Club's website.  The app is uses the API bindings in the [LendingClub]([http://ryankuhn.net/LendingClub) package.
+
+The app is very much a work in progress as is this site.
