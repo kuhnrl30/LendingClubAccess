@@ -1,51 +1,7 @@
-library(shiny)
-
 shinyUI(
     navbarPage("Lending Club Access",
-               tabPanel("Account Actions",
-
-# Account tab ----
-                        tabsetPanel("AcctActs",
-                                      tabPanel("Account Summary",
-                                               tags$br(),
-                                               DT::dataTableOutput("oAccountSummary")),
-                                      tabPanel("Portfolios Owned",
-                                               tags$br(),
-                                               DT::dataTableOutput("oPortfoliosOwned")),
-                                      tabPanel("Notes Owned",
-                                               id="tabNotesOwned",
-                                               tags$br(),
-                                               textInput('txtLoanId', 'Loan ID'),
-                                               actionButton("bSell",
-
-                                                            "Sell"),
-                                               tags$br(),
-                                               tags$br(),
-                                               DT::dataTableOutput("oNotesOwned")),
-                                      tabPanel("Detailed Notes Owned",
-                                               tags$br(),
-                                               actionButton("btnSell",
-
-                                                            "Sell"),
-                                               tags$br(),
-                                               tags$br(),
-                                               DT::dataTableOutput("oDetailedNotesOwned"))
-                          )),
-
-# Market tab ----
-
-               tabPanel("Market",
-                          tabsetPanel("NotesMenu",
-                                      tabPanel("Primary Market",
-                                               tags$br(),
-                                               actionButton("btnBuy",
-                                                            "Buy Note"),
-                                               tags$br(),
-                                               tags$br(),
-                                               DT::dataTableOutput("oListedLoans")),
-                                      tabPanel("Secondary Market",
-                                               DT::dataTableOutput("oSecondary"))
-                          )),
+               tabPanel("Account Actions", AccountSummUI()),
+               tabPanel("Market",MarketUI()),
 
 # Transfer tab ----
 

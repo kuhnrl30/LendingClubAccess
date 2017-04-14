@@ -1,0 +1,8 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+Extraneous/*
+^testing.R
+_pkgdown.yml
+\.travis.yml
+\docs$
+^appveyor\.yml$

@@ -1,4 +1,4 @@
-#LendinClubAccess
+#LendingClubAccess
 
 [![Build Status](https://travis-ci.org/kuhnrl30/LendingClubAccess.svg?branch=master)](https://travis-ci.org/kuhnrl30/LendingClubAccess)
 

@@ -1,6 +1,6 @@
 #' @export
 GUI_NotesOwned<- function(){
-    NotesOwned()$content %>%
+    LendingClub::NotesOwned()$content %>%
         select(loanId:paymentsReceived) %>%
         GUI_Headers()
 }
