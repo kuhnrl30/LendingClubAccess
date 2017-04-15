@@ -1,5 +1,7 @@
 source("AccountSummUI.R")
 source("MarketUI.R")
+source("SetupUI.R")
+source("TransferUI.R")
 library(shiny)
 library(LendingClub)
 library(LendingClubAccess)
