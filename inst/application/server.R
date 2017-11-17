@@ -45,7 +45,7 @@ shinyServer(function(input,output, session){
                                                   selection='single')
 
     observeEvent(input$oNotesOwned_rows_selected, {
-        info= input$oNotesOwned_rows_selected
+        info = input$oNotesOwned_rows_selected
         if (is.null(info)) return()
         updateTextInput(session, 'txtLoanId', value = GUI_NotesOwned()[info,1])
         })
