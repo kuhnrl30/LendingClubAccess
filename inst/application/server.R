@@ -1,63 +1,36 @@
+function(input,output, session){
 
-shinyServer(function(input,output, session){
+  load("../../Extraneous/cred.rds")
+  
+  #Setup
+  session$onSessionEnded(stopApp)
 
-    #Setup
-    session$onSessionEnded(stopApp)
+  
+  output$primary <- DT::renderDataTable(
+    DT::datatable(LendingClub::ListedLoans()$content$loans,
+                  options = list(
+                    lengthMenu = list(c(5, 15, -1), c('5', '15', 'All')),
+                    pageLength = 15)))
 
-# Account tab ----
-    output$oAccountSummary <- DT::renderDataTable({AccountSummary()$content})
-
-    output$oPortfoliosOwned<- DT::renderDataTable({PortfoliosOwned()$content},
-                                                  options = list(lengthMenu = c(5, 25, 50),
-                                                                 pageLength = 5),
-                                                  selection='single')
-
-
-
-    output$oDetailedNotesOwned     <- DT::renderDataTable({DetailedNotesOwned()$content},
-                                                          options = list(lengthMenu = c(5, 25, 50),
-                                                                         pageLength = 5),
-                                                          selection='single')
-
-    output$oListedLoans    <- DT::renderDataTable({ListedLoans()$content},
-                                                  options = list(lengthMenu = c(5, 25, 50),
-                                                                 pageLength = 10),
-                                                  selection='single')
-
-    output$oSecondary      <- DT::renderDataTable({FolioListing()},
-                                                  options = list(lengthMenu = c(5, 25, 50),
-                                                                 pageLength = 10),
-                                                  selection='single')
-
-
-# Notes tab ----
-    # dat<- reactive({
-    #     if(input$id=="tabNotesOwned"){
-    #         # NotesOwned()$content
-    #         GUI_NotesOwned()
-    #     } else {
-    #         NULL}})
-
-    output$oNotesOwned     <- DT::renderDataTable({GUI_NotesOwned()},
-                                                  # options = list(lengthMenu = c(5, 25, 50),
-                                                                 # pageLength = 10),
-                                                  options = list(lengthChange = FALSE),
-                                                  selection='single')
-
-    observeEvent(input$oNotesOwned_rows_selected, {
-        info = input$oNotesOwned_rows_selected
-        if (is.null(info)) return()
-        updateTextInput(session, 'txtLoanId', value = GUI_NotesOwned()[info,1])
-        })
-
-# Transfers tab ----
-
-    output$oTransfers <- DT::renderDataTable({PendingTransfers()$content},
-                                             options = list(lengthMenu = c(5, 25, 50),
-                                                            pageLength = 10),
-                                             selection='single')
-
-
-    })
-
-
+  
+  output$holdings <- DT::renderDataTable(DT::datatable({
+    data<- LendingClub::DetailedNotesOwned()$content
+    
+    if(input$portfolioNameInput != "All") {
+      data<- data[data["portfolioName"]== input$portfolioNameInput,]
+    }
+    
+    if(input$loanStatusInput != "All") {
+      data<- data[data["loanStatus"]== input$loanStatusInput,]
+    }
+    
+    data
+  }, rownames=FALSE))
+ 
+  output$acctSummary<- DT::renderDataTable(
+    DT::datatable(LendingClub::AccountSummary()$content,
+                  options= list(
+                    paging=F,
+                    searching=F))) 
+    
+}
