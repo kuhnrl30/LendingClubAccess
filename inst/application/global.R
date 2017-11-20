@@ -21,3 +21,8 @@ status_opts<- c("All",
                 "Charged Off")
 
 PortfolioNames<- c("All",LendingClub::PortfoliosOwned()$content$portfolioName)
+
+purpose_opts <- c("All",
+                  "car",
+                  "credit_card",
+                  "debt_consolidation")
