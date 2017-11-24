@@ -1,6 +1,8 @@
-.Rproj.user
-.Rhistory
-.RData
-.Ruserdata
-testing.R
+^/.Rproj$
+/.Rhistory
+/.RData
+/.Ruserdata
+testing/.R
 Extraneous/
+
+.Rproj.user

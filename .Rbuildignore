@@ -4,5 +4,7 @@ Extraneous/*
 ^testing.R
 _pkgdown.yml
 \.travis.yml
-\docs$
+^docs$
 ^appveyor\.yml$
+index\.Rmd
+^_pkgdown\.yml$
