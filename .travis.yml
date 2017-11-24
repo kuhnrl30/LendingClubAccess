@@ -4,7 +4,7 @@ cache: packages
 r_packages:
   - dplyr
   - DT
-  - DataTable
+  - data.table
   - LendingClub
   - markdown
   - dplyr
