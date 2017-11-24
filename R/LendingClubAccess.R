@@ -4,7 +4,9 @@
 #' Lending Club website.  Investors are able to access their account summary,
 #' transfer money in or out of their account, and most importantly buy and sell
 #' notes.
-#' @import "LendingClub"
 #' @docType package
+#' @import shiny
+#' @import data.table
+#' @import LendingClub
 #' @name LendingClubAccess
 NULL

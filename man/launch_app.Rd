@@ -6,6 +6,11 @@
 \usage{
 launch_app(x, ...)
 }
+\arguments{
+\item{x}{your LC credential}
+
+\item{...}{pass additional arguments to shiny::runApp}
+}
 \description{
 Opens a shiny app capable of retrieving Lending Club account data and to
  execute transactions.

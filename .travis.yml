@@ -1,8 +1,11 @@
 language: r
 sudo: false
 cache: packages
-r_packages: 
-  - ggplot2
-  - caret
+r_packages:
   - dplyr
-  
+  - DT
+  - DataTable
+  - LendingClub
+  - markdown
+  - dplyr
+

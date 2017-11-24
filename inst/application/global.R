@@ -2,18 +2,12 @@ source("AccountSummUI.R")
 # source("MarketUI.R")
 # source("SetupUI.R")
 # source("TransferUI.R")
-library(shiny)
-library(LendingClub)
-library(LendingClubAccess)
-library(markdown)
-library(data.table)
-library(dplyr)
 # source("menuOptions.R")
-
+library("LendingClub")
 status_opts<- c("All",
                 "Current",
                 "Issued",
-                "In Fudning",
+                "In Funding",
                 "Fully Paid",
                 "In Grace Period",
                 "Late (16-30 days)",
@@ -25,4 +19,12 @@ PortfolioNames<- c("All",LendingClub::PortfoliosOwned()$content$portfolioName)
 purpose_opts <- c("All",
                   "car",
                   "credit_card",
-                  "debt_consolidation")
+                  "debt_consolidation",
+                  "house",
+                  "home_improvement",
+                  "major_purpose",
+                  "medical",
+                  "moving",
+                  "small_business",
+                  "vacation",
+                  "other")

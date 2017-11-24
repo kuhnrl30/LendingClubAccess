@@ -7,8 +7,30 @@ shinyUI(
                collapsible = T,
                tabPanel("Account Summary",
                         tabsetPanel(
-                          tabPanel("Summary",
-                                   DT::dataTableOutput('acctSummary')),
+                          tabPanel("Dashboard",
+                            wellPanel(class="col-md-2",
+                                tags$table(class = "inputs-table",
+                                    tags$tr(
+                                        tags$td("Avaible Cash"),
+                                        tags$td(textOutput("availablecash"))),
+                                    tags$tr(
+                                        tags$td("Account Total"),
+                                        tags$td(textOutput("AcctTotal"))),
+                                    tags$tr(
+                                        tags$td("Accrued Interest"),
+                                        tags$td(textOutput("AccruedInterest"))))),
+                             wellPanel(class="col-md-2",
+                                       tags$table(class= "inputs-table",
+                                           tags$tr(
+                                               tags$td("Interest Recieved"),
+                                               tags$td("Int")),
+                                           tags$tr(
+                                               tags$td("Defaulted"),
+                                               tags$td("Def")),
+                                           tags$tr(
+                                               tags$td("Ratio"),
+                                               tags$td("Rat"))))
+                            ), # closes the dashboard
                           tabPanel("Transfer Funds"))),
                tabPanel("Holdings",
                         fluidRow(
@@ -16,7 +38,7 @@ shinyUI(
                                  selectInput("portfolioNameInput","Portfolio",PortfolioNames),
                                  selectInput("loanStatusInput","Status",status_opts)),
                             column(10,
-                                   DT::dataTableOutput('holdings')))),
+                                   dataTableOutput('holdings')))),
                tabPanel("Market",
                         tabsetPanel(
                           tabPanel("Primary",
@@ -30,6 +52,8 @@ shinyUI(
                                                           selected="All",
                                                           multiple=T)),
                                        column(10,
-                                              DT::dataTableOutput('primary')))),
-                          tabPanel("Secondary")))
-               ))
+                                              dataTableOutput('primary')))),
+                          tabPanel("Secondary"))),
+               tags$head(
+                   tags$link(rel = "stylesheet", type = "text/css", href = "table.css")))
+    )
