@@ -1,9 +1,11 @@
-source("AccountSummUI.R")
+# source("AccountSummUI.R")
 # source("MarketUI.R")
 # source("SetupUI.R")
 # source("TransferUI.R")
 # source("menuOptions.R")
-library("LendingClub")
+library(tidyr)
+library(LendingClub)
+library(dplyr)
 status_opts<- c("All",
                 "Current",
                 "Issued",
@@ -28,3 +30,7 @@ purpose_opts <- c("All",
                   "small_business",
                   "vacation",
                   "other")
+
+at_risk_status<- c("Late (16-30 days)",
+                   "Late (31-120 days)",
+                   "Charged Off")
