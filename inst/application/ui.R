@@ -6,7 +6,7 @@ shinyUI(
                tabPanel("Account Summary",
                         tabsetPanel(
                           tabPanel("Dashboard",
-                            wellPanel(class="col-md-2",
+                            wellPanel(class="col-md-3",
                                 tags$table(class = "inputs-table",
                                     tags$tr(
                                         tags$td("Avaible Cash"),
@@ -17,7 +17,7 @@ shinyUI(
                                     tags$tr(
                                         tags$td("Accrued Interest"),
                                         tags$td(textOutput("AccruedInterest"))))),
-                             wellPanel(class="col-md-2",
+                             wellPanel(class="col-md-3",
                                        tags$table(class= "inputs-table",
                                            tags$tr(
                                                tags$td("Interest Recieved"),
@@ -29,9 +29,15 @@ shinyUI(
                                                tags$td("Ratio"),
                                                tags$td(textOutput("AtRiskRatio"))))),
                             wellPanel(class="col-md-10",
-                                      tableOutput('portfolioSumm'))
+                                      tableOutput('portfolioSumm'),
+                                      tags$i("Excludes notes sold on the secondary market"))
                             ), # closes the dashboard
-                          tabPanel("Transfer Funds"))),
+                          tabPanel("Transfer Funds",
+                                   numericInput("transferAmount","Amount to Transfer",0),
+                                   actionButton("deposit","Deposit"),
+                                   actionButton("withdraw","Withdraw")
+                                   ) # Closes Trasfers
+                          )),
                tabPanel("Holdings",
                         fluidRow(
                             column(2,
@@ -52,7 +58,9 @@ shinyUI(
                                                           selected="All",
                                                           multiple=T)),
                                        column(10,
-                                              DT::dataTableOutput('primary')))),
+                                              DT::dataTableOutput('primary')))
+                                
+                                   ), # closes primary
                           tabPanel("Secondary"))),
                tags$head(
                    tags$link(rel = "stylesheet", type = "text/css", href = "table.css")))

@@ -15,7 +15,9 @@ Imports:
   DT,
   data.table
 Depends:
-  LendingClub
+  LendingClub,
+  tidyr,
+  dplyr
 Suggests:
   knitr
 RoxygenNote: 6.0.1
