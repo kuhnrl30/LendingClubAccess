@@ -3,10 +3,13 @@ shinyUI(
                theme="journal.css",
                position = "static-top",
                collapsible = T,
+               
+               # Account Summary ----
                tabPanel("Account Summary",
                         tabsetPanel(
                           tabPanel("Dashboard",
-                            wellPanel(class="col-md-3",
+                            fluidRow(
+                              column(5, wellPanel(
                                 tags$table(class = "inputs-table",
                                     tags$tr(
                                         tags$td("Avaible Cash"),
@@ -16,8 +19,8 @@ shinyUI(
                                         tags$td(textOutput("AcctTotal"))),
                                     tags$tr(
                                         tags$td("Accrued Interest"),
-                                        tags$td(textOutput("AccruedInterest"))))),
-                             wellPanel(class="col-md-3",
+                                        tags$td(textOutput("AccruedInterest")))))),
+                             column(5, wellPanel(
                                        tags$table(class= "inputs-table",
                                            tags$tr(
                                                tags$td("Interest Recieved"),
@@ -27,17 +30,24 @@ shinyUI(
                                                tags$td(textOutput("AtRisk"))),
                                            tags$tr(
                                                tags$td("Ratio"),
-                                               tags$td(textOutput("AtRiskRatio"))))),
-                            wellPanel(class="col-md-10",
+                                               tags$td(textOutput("AtRiskRatio"))))))),
+                            column(10, wellPanel(class="col-md-10",
                                       tableOutput('portfolioSumm'),
-                                      tags$i("Excludes notes sold on the secondary market"))
+                                      tags$i("Excludes notes sold on the secondary market")))
                             ), # closes the dashboard
                           tabPanel("Transfer Funds",
-                                   numericInput("transferAmount","Amount to Transfer",0),
-                                   actionButton("deposit","Deposit"),
-                                   actionButton("withdraw","Withdraw")
-                                   ) # Closes Trasfers
+                            fluidRow(
+                              column(4,
+                                     numericInput("depositAmount", label=h3("Amount to Deposit"), 0),
+                                     selectInput("depositCycle", label=h3("Cycle"), deposit_opts),
+                                     dateRangeInput("dates", label = h3("Date range")),
+                                     actionButton("deposit", "Deposit")),
+                              column(4,
+                                   numericInput("withdrawAmount", h3("Amount to Withdraw"), 0),
+                                   actionButton("withdraw", "Withdraw")
+                                   ))) # Closes Trasfers
                           )),
+               # Dashboard ----
                tabPanel("Holdings",
                         fluidRow(
                             column(2,

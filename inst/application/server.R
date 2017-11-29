@@ -8,7 +8,10 @@ function(input,output, session){
 
 # Transfer funds
   observeEvent(input$deposit, {
-    AddFunds(input$transferAmount, "LOAD_NOW")
+    AddFunds(input$withdrawAmount, 
+             input$depositCycle, 
+             input$dateRangeInput[1], 
+             input$dateRangeInput[2])
   })
   
   observeEvent(input$withdraw, {

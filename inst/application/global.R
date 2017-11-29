@@ -34,3 +34,10 @@ purpose_opts <- c("All",
 at_risk_status<- c("Late (16-30 days)",
                    "Late (31-120 days)",
                    "Charged Off")
+
+deposit_opts<- c("LOAD_NOW",
+                 "LOAD_ONCE",
+                 "LOAD_WEEKLY",
+                 "LOAD_BIWEEKLY",
+                 "LOAD_ON_DAY_1_AND_15",
+                 "LOAD_MONTHLY")
