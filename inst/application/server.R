@@ -6,7 +6,7 @@ function(input,output, session){
   session$onSessionEnded(stopApp)
   values <- reactiveValues()
 
-# Transfer funds
+# Transfer funds ----
   observeEvent(input$deposit, {
     AddFunds(input$withdrawAmount, 
              input$depositCycle, 
@@ -16,7 +16,9 @@ function(input,output, session){
   
   observeEvent(input$withdraw, {
     # WithdrawFunds(input$transferAmount)
-    showNotification("Withdrawl processing", type= "warning")
+    showModal(modalDialog(
+      title = "Withdrawl submitted",
+      "Withdrawl processing"))
   })
   
   
@@ -54,63 +56,74 @@ function(input,output, session){
   }, rownames=FALSE))
 
 # Account Summary ----
-  observeEvent(input$show, {
-    showModal(modalDialog(
-      title = "Important message",
-      "This is an important message!"))
-  })
+    values$AccountSummaryData<- {
+      data<- LendingClub::AccountSummary()$content
+      acctsumm <- as.data.frame(t(data[,2]), stringsAsFactors = F)
+      colnames(acctsumm)<- t(data[,1])
+      acctsumm}
+    
+    values$holdings<- LendingClub::DetailedNotesOwned()$content
+    
+    values$AtRisk<- {
+      dat<- LendingClub::DetailedNotesOwned()$content
+      dat<-dat[dat$loanStatus %in% at_risk_status,]    
+      sum(as.numeric(dat$noteAmount)- as.numeric(dat$principalReceived))
+      }
+
   
-  values$AccountSummaryData<- {
-    data<- LendingClub::AccountSummary()$content
-    acctsumm <- as.data.frame(t(data[,2]), stringsAsFactors = F)
-    colnames(acctsumm)<- t(data[,1])
-    acctsumm}
-  
-  values$holdings<- LendingClub::DetailedNotesOwned()$content
-  
-  values$AtRisk<- {
-    dat<- LendingClub::DetailedNotesOwned()$content
-    dat<-dat[dat$loanStatus %in% at_risk_status,]    
-    sum(as.numeric(dat$noteAmount)- as.numeric(dat$principalReceived))
-  }
-  
-  output$availablecash<- renderText(paste0("$",values$AccountSummaryData$availableCash))
-  output$AcctTotal    <- renderText(paste0("$",values$AccountSummaryData$accountTotal))
-  output$AccruedInterest <- renderText(paste0("$",values$AccountSummaryData$accruedInterest))
-  output$InterestReceived <- renderText(paste0("$",values$AccountSummaryData$receivedInterest))
-  output$AtRisk <- renderText({paste0("$",values$AtRisk)})
-  output$AtRiskRatio<- renderText({round(as.numeric(values$AccountSummaryData$receivedInterest)/values$AtRisk,2)})
-  
-  
-  output$portfolioSumm<- renderTable({
-    values$holdings %>% 
-      # dat %>%
-      mutate(PurchaseDiscount= as.numeric(principalReceived)+as.numeric(principalPending)-as.numeric(noteAmount),
-             chargeOff= ifelse(currentPaymentStatus=="ChargedOff", principalPending,0),
-             principalPending= ifelse(currentPaymentStatus=="ChargedOff",0, principalPending),
-             WgtIntRate= as.numeric(interestRate) * as.numeric(principalPending)) %>%
-      group_by(portfolioName) %>%
-      summarize("Amount Invested"= sum(as.numeric(noteAmount)),
-                Discount= sum(PurchaseDiscount),
-                "Charged Off" = -sum(as.numeric(chargeOff)),
-                "Principal Received" = -sum(as.numeric(principalReceived)),
-                Outstanding = sum(as.numeric(principalPending)),
-                "Interest Received"= sum(as.numeric(interestReceived)),
-                "Payments Received" = sum(as.numeric(paymentsReceived)),
-                sumWgtIntRate = sum(WgtIntRate)) %>%
-      mutate("Wgt Int Rate"= round(sumWgtIntRate/ Outstanding,2)) %>%
-      select(-sumWgtIntRate) %>%
-      rename(Portfolio= portfolioName,
-             "Net Outstanding"= Outstanding) %>%
-      gather("Metric","val", -Portfolio) %>%
-      # str()
-      mutate(Metric= factor(Metric, levels=c("Amount Invested","Discount","Charged Off","Principal Received","Net Outstanding","Interest Received","Payments Received","Wgt Int Rate"))) %>%
-      spread(Portfolio,val) %>%
-      mutate(Total = rowSums(select_(.,"-Metric"))) %>%
-      mutate(Total= ifelse(Metric=="Wgt Interest Rate",NA,Total))
+    output$availablecash<- renderText({
+      input$acctSummUpdate
+      paste0("$",values$AccountSummaryData$availableCash)})
+    
+    output$AcctTotal    <- renderText({
+      input$acctSummUpdate
+      paste0("$",values$AccountSummaryData$accountTotal)})
+    
+    output$AccruedInterest <- renderText({
+      input$acctSummUpdate
+      paste0("$",values$AccountSummaryData$accruedInterest)})
+    
+    output$InterestReceived <- renderText({
+      input$acctSummUpdate
+      paste0("$",values$AccountSummaryData$receivedInterest)})
+    
+    output$AtRisk <- renderText({
+      input$acctSummUpdate
+      paste0("$",values$AtRisk)})
+    
+    output$AtRiskRatio<- renderText({
+      input$acctSummUpdate
+      round(as.numeric(values$AccountSummaryData$receivedInterest)/values$AtRisk,2)})
     
     
-  })
+    output$portfolioSumm<- renderTable({
+      input$acctSummUpdate
+      values$holdings %>% 
+        # dat %>%
+        mutate(PurchaseDiscount= as.numeric(principalReceived)+as.numeric(principalPending)-as.numeric(noteAmount),
+               chargeOff= ifelse(currentPaymentStatus=="ChargedOff", principalPending,0),
+               principalPending= ifelse(currentPaymentStatus=="ChargedOff",0, principalPending),
+               WgtIntRate= as.numeric(interestRate) * as.numeric(principalPending)) %>%
+        group_by(portfolioName) %>%
+        summarize("Amount Invested"= sum(as.numeric(noteAmount)),
+                  Discount= sum(PurchaseDiscount),
+                  "Charged Off" = -sum(as.numeric(chargeOff)),
+                  "Principal Received" = -sum(as.numeric(principalReceived)),
+                  Outstanding = sum(as.numeric(principalPending)),
+                  "Interest Received"= sum(as.numeric(interestReceived)),
+                  "Payments Received" = sum(as.numeric(paymentsReceived)),
+                  sumWgtIntRate = sum(WgtIntRate)) %>%
+        mutate("Wgt Int Rate"= round(sumWgtIntRate/ Outstanding,2)) %>%
+        select(-sumWgtIntRate) %>%
+        rename(Portfolio= portfolioName,
+               "Net Outstanding"= Outstanding) %>%
+        gather("Metric","val", -Portfolio) %>%
+        # str()
+        mutate(Metric= factor(Metric, levels=c("Amount Invested","Discount","Charged Off","Principal Received","Net Outstanding","Interest Received","Payments Received","Wgt Int Rate"))) %>%
+        spread(Portfolio,val) %>%
+        mutate(Total = rowSums(select_(.,"-Metric"))) %>%
+        mutate(Total= ifelse(Metric=="Wgt Interest Rate",NA,Total))
+    })
   
                                   
 } # close session

@@ -10,6 +10,7 @@ shinyUI(
                           tabPanel("Dashboard",
                             fluidRow(
                               column(5, wellPanel(
+                        
                                 tags$table(class = "inputs-table",
                                     tags$tr(
                                         tags$td("Avaible Cash"),
@@ -31,9 +32,11 @@ shinyUI(
                                            tags$tr(
                                                tags$td("Ratio"),
                                                tags$td(textOutput("AtRiskRatio"))))))),
-                            column(10, wellPanel(class="col-md-10",
+                            fluidRow(
+                              column(10, wellPanel(class="col-md-10",
                                       tableOutput('portfolioSumm'),
-                                      tags$i("Excludes notes sold on the secondary market")))
+                                      tags$i("Excludes notes sold on the secondary market")))),
+                            actionButton("acctSummUpdate","Update")
                             ), # closes the dashboard
                           tabPanel("Transfer Funds",
                             fluidRow(
