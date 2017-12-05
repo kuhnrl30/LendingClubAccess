@@ -7,6 +7,7 @@ shinyUI(
                # Account Summary ----
                tabPanel("Account Summary",
                         tabsetPanel(
+                          # Dashboard ----
                           tabPanel("Dashboard",
                             fluidRow(
                               column(5, wellPanel(
@@ -50,7 +51,7 @@ shinyUI(
                                    actionButton("withdraw", "Withdraw")
                                    ))) # Closes Trasfers
                           )),
-               # Dashboard ----
+              
                tabPanel("Holdings",
                         fluidRow(
                             column(2,
@@ -59,22 +60,26 @@ shinyUI(
                             column(10,
                                    DT::dataTableOutput('holdings')))),
                tabPanel("Market",
-                        tabsetPanel(
-                          tabPanel("Primary",
-                                   fluidRow(
-                                       column(2,
-                                              sliderInput("intRateRange","Interest Rate",
-                                                          min=5, max=30,
-                                                          value=c(10,25)),
-                                              selectInput("loanPurposeInput","Purpose",
-                                                          purpose_opts,
-                                                          selected="All",
-                                                          multiple=T)),
-                                       column(10,
-                                              DT::dataTableOutput('primary')))
-                                
-                                   ), # closes primary
-                          tabPanel("Secondary"))),
-               tags$head(
+              tabsetPanel(
+                # Primary Market ----
+                tabPanel("Primary",
+                      fluidRow(
+                        column(4,
+                               sliderInput("intRateRange","Interest Rate", min=5, max =30, value= c(10,25))),
+                        column(4,
+                               selectInput("loanPurposeInput","Purpose", purpose_opts, selected="All", multiple=T)),
+                      column(4,
+                             selectInput("loanGrades","Grade", c("All", LETTERS[1:7]), selected="All", multiple=T))),
+                      fluidRow(
+                        column(4,
+                               selectInput("loanTermInput","Loan Term", c("All","36 mo", "60 mo"), multiple=T)),
+                        column(4,
+                               sliderInput("dtiInput","Debt to Income",min=0, max=40, value =c(15,30)))),
+                      fluidRow(
+                        DT::dataTableOutput('primary'))
+                         ), # closes primary
+                # Secondary Market ----
+                tabPanel("Secondary"))),
+              tags$head(
                    tags$link(rel = "stylesheet", type = "text/css", href = "table.css")))
     )
