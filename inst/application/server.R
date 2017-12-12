@@ -126,4 +126,41 @@ function(input,output, session){
     })
   
                                   
+    
+# Summary Plot ----
+    output$summaryPlot<- renderPlotly({
+      dat<- values$holdings
+      
+      dat<-dat %>%
+        mutate(CFRatio= round((as.numeric(paymentsReceived) - as.numeric(noteAmount)) /as.numeric(noteAmount)*100,2),
+               orderDate= as.Date(orderDate))
+      
+      dat$simpleStatus <- case_when(dat$loanStatus == "Charged Off" ~ "Complete",
+                                      dat$loanStatus == "Current" ~"Performing",
+                                      dat$loanStatus == "Fully Paid" ~ "Complete",
+                                      dat$loanStatus == "In Grace Period" ~ "Performing",
+                                      dat$loanStatus == "In Review" ~ "Performing",
+                                      dat$loanStatus == "Issued" ~ "Performing",
+                                      dat$loanStatus == "Late (16-30 days)" ~ "Late",
+                                      dat$loanStatus == "Late (31-120 days)" ~ "Late")
+      
+      ThreeYear<- as.Date(Sys.time())-(365*3)
+      FiveYear<- as.Date(Sys.time()-(365*5))
+      
+      g<- ggplot(dat)
+      g<- g + aes(x= orderDate, y= CFRatio, group= portfolioName, color= simpleStatus)
+      g<- g + geom_point()
+      g<- g + scale_x_date(limits= c(ThreeYear-150, as.Date(Sys.time())+50))
+      g<- g + facet_grid(~portfolioName)
+      g<- g + theme_LC()
+      g<- g + labs(x= "Order Date",
+                   y= "Payback Ratio")
+      g<- g + geom_hline(yintercept =0, linetype="dashed")
+      g<- g + theme(legend.position="none",
+                    panel.border  = element_rect(colour = "black", fill=NA))
+      
+      ggplotly(g)
+      
+    })
+    
 } # close session

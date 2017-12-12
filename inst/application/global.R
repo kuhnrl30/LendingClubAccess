@@ -6,6 +6,8 @@
 library(tidyr)
 library(LendingClub)
 library(dplyr)
+library(plotly)
+library(LendingClubData)
 status_opts<- c("All",
                 "Current",
                 "Issued",

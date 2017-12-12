@@ -3,6 +3,7 @@ shinyUI(
                theme="journal.css",
                position = "static-top",
                collapsible = T,
+               fluid = TRUE,
                
                # Account Summary ----
                tabPanel("Account Summary",
@@ -10,7 +11,7 @@ shinyUI(
                           # Dashboard ----
                           tabPanel("Dashboard",
                             fluidRow(
-                              column(5, wellPanel(
+                              column(3, wellPanel(
                         
                                 tags$table(class = "inputs-table",
                                     tags$tr(
@@ -21,22 +22,23 @@ shinyUI(
                                         tags$td(textOutput("AcctTotal"))),
                                     tags$tr(
                                         tags$td("Accrued Interest"),
-                                        tags$td(textOutput("AccruedInterest")))))),
-                             column(5, wellPanel(
-                                       tags$table(class= "inputs-table",
-                                           tags$tr(
-                                               tags$td("Interest Recieved"),
-                                               tags$td(textOutput("InterestReceived"))),
-                                           tags$tr(
-                                               tags$td("Principal At Risk"),
-                                               tags$td(textOutput("AtRisk"))),
-                                           tags$tr(
-                                               tags$td("Ratio"),
-                                               tags$td(textOutput("AtRiskRatio"))))))),
-                            fluidRow(
-                              column(10, wellPanel(class="col-md-10",
+                                        tags$td(textOutput("AccruedInterest"))),
+                                   tags$tr(
+                                       tags$td("Interest Recieved"),
+                                       tags$td(textOutput("InterestReceived"))),
+                                   tags$tr(
+                                       tags$td("Principal At Risk"),
+                                       tags$td(textOutput("AtRisk"))),
+                                   tags$tr(
+                                       tags$td("Ratio"),
+                                       tags$td(textOutput("AtRiskRatio")))))),
+          
+                              column(9, 
                                       tableOutput('portfolioSumm'),
-                                      tags$i("Excludes notes sold on the secondary market")))),
+                                      tags$i("Excludes notes sold on the secondary market"))),
+                            fluidRow(
+                              plotlyOutput("summaryPlot")
+                            ),
                             actionButton("acctSummUpdate","Update")
                             ), # closes the dashboard
                           tabPanel("Transfer Funds",
