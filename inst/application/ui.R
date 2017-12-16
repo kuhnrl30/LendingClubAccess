@@ -39,7 +39,7 @@ shinyUI(
                             fluidRow(
                               plotlyOutput("summaryPlot")
                             ),
-                            actionButton("acctSummUpdate","Update")
+                            actionButton("acctSummUpdate","Update", icon=icon("refresh"))
                             ), # closes the dashboard
                           tabPanel("Transfer Funds",
                             fluidRow(
@@ -53,14 +53,19 @@ shinyUI(
                                    actionButton("withdraw", "Withdraw")
                                    ))) # Closes Trasfers
                           )),
-              
+              # holdings ----
                tabPanel("Holdings",
                         fluidRow(
                             column(2,
                                  selectInput("portfolioNameInput","Portfolio",PortfolioNames),
-                                 selectInput("loanStatusInput","Status",status_opts)),
+                                 selectInput("loanStatusInput","Status",status_opts),
+                                 actionButton("sellbutton","Sell Notes")),
                             column(10,
-                                   DT::dataTableOutput('holdings')))),
+                                   DT::dataTableOutput('filteredholdings'))),
+                        bsModal("sellNotes",
+                                trigger = "sellbutton",
+                                fluidRow(dataTableOutput('saleorder')),
+                                actionButton("submitsale","Sell Notes"))),
                tabPanel("Market",
               tabsetPanel(
                 # Primary Market ----

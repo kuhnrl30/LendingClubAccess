@@ -8,6 +8,7 @@ library(LendingClub)
 library(dplyr)
 library(plotly)
 library(LendingClubData)
+library(shinyBS)
 status_opts<- c("All",
                 "Current",
                 "Issued",

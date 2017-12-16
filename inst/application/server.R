@@ -40,20 +40,37 @@ function(input,output, session){
       )
 
 # Holdings ----
-  output$holdings <- DT::renderDataTable(DT::datatable({
+  # output$holdings <- DT::renderDataTable(DT::datatable({
+  #   data<- LendingClub::DetailedNotesOwned()$content
+  # 
+  # 
+  #   if(input$portfolioNameInput != "All") {
+  #     data<- data[data["portfolioName"]== input$portfolioNameInput,]
+  #   }
+  # 
+  #   if(input$loanStatusInput != "All") {
+  #     data<- data[data["loanStatus"]== input$loanStatusInput,]
+  #   }
+  # 
+  #   data
+  # }, rownames=FALSE))
+  
+  filteredholdings<- reactive({
     data<- LendingClub::DetailedNotesOwned()$content
+      if(input$portfolioNameInput != "All") {
+        data<- data[data["portfolioName"]== input$portfolioNameInput,]
+        }
 
-
-    if(input$portfolioNameInput != "All") {
-      data<- data[data["portfolioName"]== input$portfolioNameInput,]
-    }
-
-    if(input$loanStatusInput != "All") {
-      data<- data[data["loanStatus"]== input$loanStatusInput,]
-    }
-
+      if(input$loanStatusInput != "All") {
+        data<- data[data["loanStatus"]== input$loanStatusInput,]
+        }
+      # DT::datattable({data})
     data
-  }, rownames=FALSE))
+    })
+  
+  output$filteredholdings<- DT::renderDataTable(
+    DT::datatable(filteredholdings(),rownames = FALSE)
+    )
 
 # Account Summary ----
     values$AccountSummaryData<- {
@@ -162,5 +179,16 @@ function(input,output, session){
       ggplotly(g)
       
     })
+    
+# Sell notes\
+    output$saleorder<- renderDataTable({
+      filteredholdings()[input$filteredholdings_rows_selected,1:5]
+    })
+    # observeEvent(input$sellbutton, {
+    #   showModal(modalDialog(
+    #     title="Selling Notes",
+    #     "test"))
+    #   
+    # })
     
 } # close session
