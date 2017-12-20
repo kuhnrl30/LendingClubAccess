@@ -9,6 +9,7 @@ library(dplyr)
 library(plotly)
 library(LendingClubData)
 library(shinyBS)
+library(shinycssloaders)
 status_opts<- c("All",
                 "Current",
                 "Issued",
@@ -42,5 +43,5 @@ deposit_opts<- c("LOAD_NOW",
                  "LOAD_ONCE",
                  "LOAD_WEEKLY",
                  "LOAD_BIWEEKLY",
-                 "LOAD_ON_DAY_1_AND_15",
+                 "LOAD_ON_DAY_1_AND_16",
                  "LOAD_MONTHLY")

@@ -32,30 +32,17 @@ function(input,output, session){
           data<- data[data$purpose %in% input$loanPurposeInput, ]
       }
       
-      data
-      }, rownames = FALSE)#,
-                  # options = list(
-                  #   lengthMenu = list(c(5, 15, -1), c('5', '15', 'All')),
-                  #   pageLength = 15)
+      data %>%
+        select(-(acceptD:reviewStatusD))
+      }, rownames = FALSE)
       )
 
 # Holdings ----
-  # output$holdings <- DT::renderDataTable(DT::datatable({
-  #   data<- LendingClub::DetailedNotesOwned()$content
-  # 
-  # 
-  #   if(input$portfolioNameInput != "All") {
-  #     data<- data[data["portfolioName"]== input$portfolioNameInput,]
-  #   }
-  # 
-  #   if(input$loanStatusInput != "All") {
-  #     data<- data[data["loanStatus"]== input$loanStatusInput,]
-  #   }
-  # 
-  #   data
-  # }, rownames=FALSE))
-  
+
   filteredholdings<- reactive({
+    
+    input$refreshNotes
+    
     data<- LendingClub::DetailedNotesOwned()$content
       if(input$portfolioNameInput != "All") {
         data<- data[data["portfolioName"]== input$portfolioNameInput,]
@@ -64,8 +51,11 @@ function(input,output, session){
       if(input$loanStatusInput != "All") {
         data<- data[data["loanStatus"]== input$loanStatusInput,]
         }
-      # DT::datattable({data})
-    data
+    data %>%
+      mutate(CFRatio= round((as.numeric(paymentsReceived) - as.numeric(noteAmount)) / as.numeric(noteAmount),2)) %>%
+      select(c(loanId, purpose, grade, noteAmount, CFRatio, interestRate, loanStatus, creditTrend, portfolioName))
+
+    
     })
   
   output$filteredholdings<- DT::renderDataTable(
@@ -74,6 +64,7 @@ function(input,output, session){
 
 # Account Summary ----
     values$AccountSummaryData<- {
+      
       data<- LendingClub::AccountSummary()$content
       acctsumm <- as.data.frame(t(data[,2]), stringsAsFactors = F)
       colnames(acctsumm)<- t(data[,1])
@@ -110,11 +101,13 @@ function(input,output, session){
     
     output$AtRiskRatio<- renderText({
       input$acctSummUpdate
-      round(as.numeric(values$AccountSummaryData$receivedInterest)/values$AtRisk,2)})
+      round(as.numeric(values$AccountSummaryData$receivedInterest)/values$AtRisk,3)})
     
     
     output$portfolioSumm<- renderTable({
+      
       input$acctSummUpdate
+      
       values$holdings %>% 
         # dat %>%
         mutate(PurchaseDiscount= as.numeric(principalReceived)+as.numeric(principalPending)-as.numeric(noteAmount),
@@ -146,6 +139,9 @@ function(input,output, session){
     
 # Summary Plot ----
     output$summaryPlot<- renderPlotly({
+      
+      input$acctSummUpdate
+      
       dat<- values$holdings
       
       dat<-dat %>%
